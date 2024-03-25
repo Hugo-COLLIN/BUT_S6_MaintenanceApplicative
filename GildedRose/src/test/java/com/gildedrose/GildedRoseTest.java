@@ -1,5 +1,6 @@
 package com.gildedrose;
 
+import com.gildedrose.items.Item;
 import org.approvaltests.combinations.CombinationApprovals;
 import org.junit.jupiter.api.Test;
 
