@@ -1,1 +1,4 @@
-foo, -1, 0
+[foo, 0, 0] => foo, -1, 0 
+[foo, 5, 0] => foo, 4, 0 
+[Aged Brie, 0, 0] => Aged Brie, -1, 2 
+[Aged Brie, 5, 0] => Aged Brie, 4, 1 
