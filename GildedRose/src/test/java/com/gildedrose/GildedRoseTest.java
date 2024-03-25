@@ -9,9 +9,10 @@ class GildedRoseTest {
     void testUpdateQuality() {
          CombinationApprovals.verifyAllCombinations(
                 this::doUpdateQuality,
-                new String[] { "foo", "Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros" },
+                new String[] { "foo", "Aged Brie", "Backstage passes to a TAFKAL80ETC concert",
+                        "Sulfuras, Hand of Ragnaros", "Conjured" },
                 new Integer[] { -1, 0, 20 },
-                new Integer[] { 0, 49, 80 });
+                new Integer[] { 0, 10, 49, 80 });
     }
 
     private String doUpdateQuality(String name, int sellIn, int quality) {

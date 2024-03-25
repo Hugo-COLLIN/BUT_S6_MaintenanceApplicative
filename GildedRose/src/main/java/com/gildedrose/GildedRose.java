@@ -27,9 +27,11 @@ class GildedRose {
                     }
                 }
                 break;
+
             case "Sulfuras, Hand of Ragnaros":
                 //Nothing
                 break;
+
             case "Backstage passes to a TAFKAL80ETC concert":
                 if (item.quality < 50) {
                     item.quality = item.quality + 1;
@@ -53,6 +55,7 @@ class GildedRose {
                     item.quality = 0;
                 }
                 break;
+
             case "Conjured":
                 if (item.quality > 0) {
                     item.quality = item.quality - 2;
@@ -68,6 +71,7 @@ class GildedRose {
                 if (item.quality < 0)
                     item.quality = 0;
                 break;
+
             default:
                 if (item.quality > 0) {
                     item.quality = item.quality - 1;
