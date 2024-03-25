@@ -7,14 +7,19 @@ class GildedRoseTest {
 
     @Test
     void testUpdateQuality() {
-        Item[] items = new Item[] { new Item("foo", 0, 0) };
+        Approvals.verify(doUpdateQuality("foo", 0, 0));
+    }
+
+    @Test
+    void testBrie() {
+        Approvals.verify(doUpdateQuality("Aged Brie", 0, 0));
+    }
+
+    private static String doUpdateQuality(String name, int sellIn, int quality) {
+        Item[] items = new Item[] { new Item(name, sellIn, quality) };
         GildedRose app = new GildedRose(items);
         app.updateQuality();
-//        assertEquals("foo", app.items[0].name);
-//        assertEquals(-1, app.items[0].sellIn);
-//        assertEquals(0, app.items[0].quality);
-//        assertEquals("foo, -1, 0", app.items[0].toString());
-        Approvals.verify(app.items[0]);
+        return app.items[0].toString();
     }
 
 }
