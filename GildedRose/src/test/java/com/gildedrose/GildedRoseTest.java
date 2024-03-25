@@ -7,7 +7,6 @@ class GildedRoseTest {
 
     @Test
     void testUpdateQuality() {
-//        Approvals.verify(doUpdateQuality("foo", 0, 0));
          CombinationApprovals.verifyAllCombinations(
                 this::doUpdateQuality,
                 new String[] { "foo", "Aged Brie" },
