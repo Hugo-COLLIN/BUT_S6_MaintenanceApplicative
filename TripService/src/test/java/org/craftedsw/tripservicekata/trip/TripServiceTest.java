@@ -17,6 +17,10 @@ public class TripServiceTest {
     private static final User LOGGED_USER = new User();
     private static final User ANOTHER_USER = new User();
 
+    private static final Trip TO_BRAZIL = new Trip();
+    private static final Trip TO_LONDON = new Trip();
+    private static final Trip TO_SZIGET = new Trip();
+
     private User loggedInUser;
 
 	public class TestableTripService extends TripService {
@@ -53,12 +57,13 @@ public class TripServiceTest {
         //GIVEN
         TripService tripService = new TestableTripService();
         loggedInUser = REGISTERED_USER;
+        User anotherUser = ANOTHER_USER;
 
-//        anotherUser.addFriend(new User());
-//        anotherUser.addTrip(new Trip());
+        anotherUser.addFriend(new User());
+        anotherUser.addTrip(TO_SZIGET);
 
         //WHEN
-        List<Trip> result = tripService.getTripsByUser(ANOTHER_USER);
+        List<Trip> result = tripService.getTripsByUser(anotherUser);
 
         //THEN
         assertTrue(result.isEmpty());
