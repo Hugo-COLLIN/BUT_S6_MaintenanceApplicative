@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TripServiceTest {
 
@@ -27,14 +26,14 @@ public class TripServiceTest {
         }
     }
 
-//    public static class TestableTripDAO extends TripDAO {
+    public static class TestableTripDAO extends TripDAO {
 //        @Override
-//        public static List<Trip> findTripsByUser(User user) {
-//            List<Trip> trips = new ArrayList<Trip>();
-//            trips.add(new Trip());
-//            return trips;
-//        }
-//    }
+        public static List<Trip> findTripsByUser(User user)  {
+            List<Trip> trips = new ArrayList<Trip>();
+            trips.add(new Trip());
+            return trips;
+        }
+    }
 
     @Test
     void shouldThrowsWhenUserIsNotLoggedIn() {
@@ -55,19 +54,22 @@ public class TripServiceTest {
         TripService tripService = new TestableTripService();
         loggedInUser = REGISTERED_USER;
 
+//        anotherUser.addFriend(new User());
+//        anotherUser.addTrip(new Trip());
+
         //WHEN
         List<Trip> result = tripService.getTripsByUser(ANOTHER_USER);
 
         //THEN
-        assertEquals(0, result.size());
+        assertTrue(result.isEmpty());
     }
 
     @Test
     void shouldReturnTripsWhenLoggedUserIsAFriend() {
         //GIVEN
         TripService tripService = new TestableTripService();
-        loggedInUser = REGISTERED_USER;
-        User anotherUser = ANOTHER_USER;
+        loggedInUser = new User();
+        User anotherUser = new User();
         loggedInUser.addFriend(anotherUser);
         anotherUser.addFriend(loggedInUser);
 
