@@ -4,7 +4,6 @@ import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
 import org.craftedsw.tripservicekata.user.User;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,14 +29,10 @@ public class TripServiceTest {
         protected User getLoggedUser() {
             return loggedInUser;
         }
-    }
 
-    public static class TestableTripDAO extends TripDAO {
-//        @Override
-        public static List<Trip> findTripsByUser(User user)  {
-            List<Trip> trips = new ArrayList<Trip>();
-            trips.add(new Trip());
-            return trips;
+        @Override
+        protected List<Trip> getTripList(User user) {
+            return user.trips();
         }
     }
 
@@ -74,29 +69,23 @@ public class TripServiceTest {
     @Test
     void shouldReturnTripsWhenLoggedUserIsAFriend() {
         //GIVEN
-        TripService tripService = new TestableTripService();
-        loggedInUser = new User();
-        User anotherUser = new User();
-        loggedInUser.addFriend(anotherUser);
-        anotherUser.addFriend(loggedInUser);
+        tripService = new TestableTripService();
+        loggedInUser = REGISTERED_USER;
+
+        User user = new User();
+        user.addFriend(ANOTHER_USER);
+        user.addFriend(loggedInUser);
+        user.addTrip(TO_BRAZIL);
+        user.addTrip(TO_LONDON);
 
         //WHEN
-        List<Trip> result = tripService.getTripsByUser(anotherUser);
-
-        System.out.println(result);
+        List<Trip> result = tripService.getTripsByUser(user);
 
         //THEN
-        assertEquals(1, result.size());
-//        assertEquals(ANOTHER_USER, result.get(0));
-
+        assertAll(
+                () -> assertEquals(2, result.size()),
+                () -> assertTrue(result.contains(TO_BRAZIL)),
+                () -> assertTrue(result.contains(TO_LONDON))
+        );
     }
-
-
-    ////Connecté demande liste ami
-    //    @Test
-    //    void shouldReturnEmptyListWhen
-    //
-    //    //Connecté demande liste pas ami
-    //    @Test
-    //    void shouldReturnEmptyListWhenQueryListNotFriends
 }
