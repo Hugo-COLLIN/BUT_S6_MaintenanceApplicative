@@ -23,6 +23,8 @@ public class TripServiceTest {
 
     private User loggedInUser;
 
+    private TripService tripService;
+
 	public class TestableTripService extends TripService {
         @Override
         protected User getLoggedUser() {
@@ -42,7 +44,7 @@ public class TripServiceTest {
     @Test
     void shouldThrowsWhenUserIsNotLoggedIn() {
         // Given
-        TripService tripService = new TestableTripService();
+        tripService = new TestableTripService();
         loggedInUser = GUEST;
 
         // When
@@ -55,7 +57,7 @@ public class TripServiceTest {
     @Test
     void shouldNotReturnTripsWhenLoggedUserIsNotAFriend() {
         //GIVEN
-        TripService tripService = new TestableTripService();
+        tripService = new TestableTripService();
         loggedInUser = REGISTERED_USER;
         User anotherUser = ANOTHER_USER;
 
