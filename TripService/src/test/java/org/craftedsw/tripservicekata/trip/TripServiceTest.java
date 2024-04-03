@@ -2,6 +2,7 @@ package org.craftedsw.tripservicekata.trip;
 
 import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
 import org.craftedsw.tripservicekata.user.User;
+import org.craftedsw.tripservicekata.user.UserBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -53,14 +54,14 @@ public class TripServiceTest {
     void shouldNotReturnTripsWhenLoggedUserIsNotAFriend() {
         //GIVEN
         tripService = new TestableTripService();
-        loggedInUser = REGISTERED_USER;
-        User anotherUser = ANOTHER_USER;
-
-        anotherUser.addFriend(new User());
-        anotherUser.addTrip(TO_SZIGET);
+        User user = UserBuilder
+                .createUser()
+                .withFriends(ANOTHER_USER)
+                .withTrips(TO_BRAZIL)
+                .build();
 
         //WHEN
-        List<Trip> result = tripService.getTripsByUser(anotherUser);
+        List<Trip> result = tripService.getTripsByUser(user);
 
         //THEN
         assertTrue(result.isEmpty());

@@ -2,12 +2,9 @@ package org.craftedsw.tripservicekata.user;
 
 import org.craftedsw.tripservicekata.trip.Trip;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class UserBuilder {
 
-	public static UserBuilder cerateUser() {
+	public static UserBuilder createUser() {
 		return new UserBuilder();
 	}
 
@@ -31,6 +28,8 @@ public class UserBuilder {
 		User user = new User();
 		for (User friend : friends)
 			user.addFriend(friend);
+		for (Trip trip : trips)
+			user.addTrip(trip);
 		return user;
 	}
 
