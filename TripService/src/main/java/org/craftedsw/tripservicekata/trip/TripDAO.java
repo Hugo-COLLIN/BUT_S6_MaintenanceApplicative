@@ -11,5 +11,8 @@ public class TripDAO {
 		throw new CollaboratorCallException(
 				"TripDAO should not be invoked on an unit test.");
 	}
-	
+
+	public static List<Trip> tripsBy(User user) {
+		return findTripsByUser(user);
+	}
 }

@@ -4,6 +4,9 @@ import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
 import org.craftedsw.tripservicekata.user.User;
 import org.craftedsw.tripservicekata.user.UserBuilder;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 
 import java.util.List;
 
@@ -23,37 +26,40 @@ public class TripServiceTest {
 
     private User loggedInUser;
 
+    @Mock
+    private TripDAO tripDAO;
+    @InjectMocks
+    @Spy
     private TripService tripService;
 
-	public class TestableTripService extends TripService {
-        @Override
-        protected User getLoggedUser() {
-            return loggedInUser;
-        }
-
-        @Override
-        protected List<Trip> getTripList(User user) {
-            return user.trips();
-        }
-    }
+//	public class TestableTripService extends TripService {
+//        @Override
+//        protected User getLoggedUser() {
+//            return loggedInUser;
+//        }
+//
+//        protected List<Trip> getTripList(User user) {
+//            return user.trips();
+//        }
+//    }
 
     @Test
     void shouldThrowsWhenUserIsNotLoggedIn() {
         // Given
-        tripService = new TestableTripService();
+        tripService = new TripService(tripDAO);
         loggedInUser = GUEST;
 
         // When
         // Then
          assertThrows(UserNotLoggedInException.class,
-                 () -> tripService.getTripsByUser(UNUSED_USER)
+                 () -> tripService.getTripsByUser(GUEST, UNUSED_USER)
          );
     }
 
     @Test
     void shouldNotReturnTripsWhenLoggedUserIsNotAFriend() {
         //GIVEN
-        tripService = new TestableTripService();
+        tripService = new TripService(tripDAO);
         User user = UserBuilder
                 .createUser()
                 .withFriends(ANOTHER_USER)
@@ -61,7 +67,7 @@ public class TripServiceTest {
                 .build();
 
         //WHEN
-        List<Trip> result = tripService.getTripsByUser(user);
+        List<Trip> result = tripService.getTripsByUser(REGISTERED_USER, user);
 
         //THEN
         assertTrue(result.isEmpty());
@@ -70,7 +76,7 @@ public class TripServiceTest {
     @Test
     void shouldReturnTripsWhenLoggedUserIsAFriend() {
         //GIVEN
-        tripService = new TestableTripService();
+        tripService = new TripService(tripDAO);
         loggedInUser = REGISTERED_USER;
 
         User user = new User();
@@ -80,7 +86,7 @@ public class TripServiceTest {
         user.addTrip(TO_LONDON);
 
         //WHEN
-        List<Trip> result = tripService.getTripsByUser(user);
+        List<Trip> result = tripService.getTripsByUser(LOGGED_USER, user);
 
         //THEN
         assertAll(
