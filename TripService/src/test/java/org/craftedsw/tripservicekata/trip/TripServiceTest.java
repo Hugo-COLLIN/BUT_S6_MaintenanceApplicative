@@ -4,14 +4,18 @@ import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
 import org.craftedsw.tripservicekata.user.User;
 import org.craftedsw.tripservicekata.user.UserBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.lenient;
 
+@ExtendWith(MockitoExtension.class)
 public class TripServiceTest {
 
     private static final User GUEST = null;
@@ -31,17 +35,6 @@ public class TripServiceTest {
     @InjectMocks
     @Spy
     private TripService tripService;
-
-//	public class TestableTripService extends TripService {
-//        @Override
-//        protected User getLoggedUser() {
-//            return loggedInUser;
-//        }
-//
-//        protected List<Trip> getTripList(User user) {
-//            return user.trips();
-//        }
-//    }
 
     @Test
     void shouldThrowsWhenUserIsNotLoggedIn() {
@@ -75,24 +68,43 @@ public class TripServiceTest {
 
     @Test
     void shouldReturnTripsWhenLoggedUserIsAFriend() {
-        //GIVEN
-        tripService = new TripService(tripDAO);
-        loggedInUser = REGISTERED_USER;
+        User user = UserBuilder
+                .createUser()
+                .withFriends(REGISTERED_USER, ANOTHER_USER)
+                .withTrips(TO_BRAZIL, TO_LONDON)
+                .build();
 
-        User user = new User();
-        user.addFriend(ANOTHER_USER);
-        user.addFriend(loggedInUser);
-        user.addTrip(TO_BRAZIL);
-        user.addTrip(TO_LONDON);
+        lenient().when(TripDAO.tripsBy(user)).thenReturn(user.trips());
 
-        //WHEN
-        List<Trip> result = tripService.getTripsByUser(LOGGED_USER, user);
+        List<Trip> result = tripService.getTripsByUser(REGISTERED_USER, user);
 
-        //THEN
         assertAll(
                 () -> assertEquals(2, result.size()),
                 () -> assertTrue(result.contains(TO_BRAZIL)),
                 () -> assertTrue(result.contains(TO_LONDON))
         );
+
+
+//        //GIVEN
+//        tripService = new TripService(tripDAO);
+//        loggedInUser = REGISTERED_USER;
+//
+//        User user = UserBuilder
+//                .createUser()
+//                .withFriends(REGISTERED_USER, ANOTHER_USER)
+//                .withTrips(TO_BRAZIL, TO_LONDON)
+//                .build();
+//
+//        //WHEN
+//        List<Trip> result = tripService.getTripsByUser(LOGGED_USER, user);
+//
+//        System.out.println(result);
+//
+//        //THEN
+//        assertAll(
+//                () -> assertEquals(2, result.size()),
+//                () -> assertTrue(result.contains(TO_BRAZIL)),
+//                () -> assertTrue(result.contains(TO_LONDON))
+//        );
     }
 }

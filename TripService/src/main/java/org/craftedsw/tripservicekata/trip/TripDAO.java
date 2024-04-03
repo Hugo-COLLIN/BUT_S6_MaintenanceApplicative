@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.craftedsw.tripservicekata.exception.CollaboratorCallException;
 import org.craftedsw.tripservicekata.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class TripDAO {
 
@@ -12,6 +13,7 @@ public class TripDAO {
 				"TripDAO should not be invoked on an unit test.");
 	}
 
+	@Autowired
 	public static List<Trip> tripsBy(User user) {
 		return findTripsByUser(user);
 	}
