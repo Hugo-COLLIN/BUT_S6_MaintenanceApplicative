@@ -6,28 +6,19 @@ import java.util.List;
 import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
 import org.craftedsw.tripservicekata.user.User;
 import org.craftedsw.tripservicekata.user.UserSession;
+
 // Singleton !!!
 public class TripService {
 
 	public List<Trip> getTripsByUser(User user) throws UserNotLoggedInException {
-		List<Trip> tripList = new ArrayList<Trip>();
 		User loggedUser = getLoggedUser();
-		boolean isFriend = false;
-		if (loggedUser != null) {
-			for (User friend : user.getFriends()) {
-				if (friend.equals(loggedUser)) {
-					isFriend = true;
-					break;
-				}
-			}
-			if (isFriend) {
-				tripList = getTripList(user);
-			}
-			return tripList;
-		} else {
-			throw new UserNotLoggedInException();
-		}
-	}
+
+		if (loggedUser == null) throw new UserNotLoggedInException();
+
+		return user.isFriendWith(loggedUser)
+				? getTripsByUser(user)
+				: new ArrayList<>();
+    }
 
 	protected List<Trip> getTripList(User user) {
 		return TripDAO.findTripsByUser(user);
